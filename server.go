@@ -48,11 +48,17 @@ func main() {
 
 	router.GET("/dbtest/:id", func(c *gin.Context) {
 		db.AutoMigrate(&models.User{})
-		first := models.User{4, "lohith","test"}
+		first := models.User{Email:"lohith",Password :"test"}
 		result := db.Create(&first)
 		fmt.Println(result.RowsAffected)
-		c.JSON(http.StatusOK,gin.H{"message":string(first.ID)})
+		c.JSON(http.StatusOK,gin.H{"message":first.ID})
 	})
+	router.GET("/google/12",func(c*gin.Context){
+		c.Redirect(http.StatusMovedPermanently, "http://www.google.com/")
+	})
+
+
+	router.POST("/signup",handlers.Signup(router,db))
 
 	http.ListenAndServe(":8080", router)
 }
