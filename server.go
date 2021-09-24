@@ -4,11 +4,10 @@ import (
 	"log"
 	"net/http"
 	"server/handlers"
-	"server/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"fmt"
+
 )
 
 func main() {
@@ -23,42 +22,10 @@ func main() {
 	}
 
 	router.GET("/", handlers.Home(router))
-
-	router.GET("/:name", func(c *gin.Context) {
-		var test models.User
-		result := db.First(&test)
-		c.JSON(http.StatusOK, gin.H{
-			"user": test.Email,
-		})
-		fmt.Println(result.Error)
-
-	})
-
-	router.POST("/", func(c *gin.Context) {
-		// var hai models.Hai
-		// err := c.ShouldBindJSON(&hai)
-		message := c.PostForm("hai")
-		test := c.DefaultPostForm("test","test")
-		c.JSON(http.StatusOK,gin.H{"message":message,"test":test})
-		// if err != nil {
-		// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		// }
-
-	})
-
-	router.GET("/dbtest/:id", func(c *gin.Context) {
-		db.AutoMigrate(&models.User{})
-		first := models.User{Email:"lohith",Password :"test"}
-		result := db.Create(&first)
-		fmt.Println(result.RowsAffected)
-		c.JSON(http.StatusOK,gin.H{"message":first.ID})
-	})
-	router.GET("/google/12",func(c*gin.Context){
-		c.Redirect(http.StatusMovedPermanently, "http://www.google.com/")
-	})
-
-
+	
 	router.POST("/signup",handlers.Signup(router,db))
+
+	router.POST("/login",handlers.Login(router,db))
 
 	http.ListenAndServe(":8080", router)
 }
