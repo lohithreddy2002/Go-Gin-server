@@ -9,6 +9,8 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/golang-jwt/jwt/v4 v4.1.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.2 // indirect
@@ -24,6 +26,6 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gorm.io/driver/mysql v1.1.2 // indirect
-	gorm.io/gorm v1.21.15 // indirect
+	gorm.io/driver/mysql v1.1.3 // indirect
+	gorm.io/gorm v1.22.2 // indirect
 )
