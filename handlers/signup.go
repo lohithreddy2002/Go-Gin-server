@@ -7,6 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"net/smtp"
+	"fmt"
 )
 
 func Signup(router *gin.Engine, db *gorm.DB) gin.HandlerFunc {
@@ -42,4 +44,38 @@ func Signup(router *gin.Engine, db *gorm.DB) gin.HandlerFunc {
 		})
 
 	}
+}
+
+func Sendemail(email string,otp string) error{
+	from:="fastgram722@gmail.com"
+	pswd:= "Fastgram23"
+	host := "smtp.gmail.com"
+ 
+    // Its the default port of smtp server
+    port := "587"
+
+	println(email)
+ 
+	toList := []string{"rocklohithreddy@gmail.com"}
+
+    // This is the message to send in the mail
+    msg := "Hello User your otp is "+otp
+
+	body:= []byte(msg)
+
+	auth:= smtp.PlainAuth("",from,pswd,host)
+	err := smtp.SendMail(host+":"+port, auth, from, toList, body)
+ 
+    // handling the errors
+    if err != nil {
+        fmt.Println(err)
+		return err
+    }
+ 
+    fmt.Println("Successfully sent mail to all user in toList")
+
+	return nil
+
+
+
 }

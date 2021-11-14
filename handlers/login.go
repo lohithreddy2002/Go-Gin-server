@@ -6,11 +6,12 @@ import (
 	"net/http"
 	"server/models"
 	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"math/rand"
+	"strconv"
 )
 
 func Login(router *gin.Engine, db *gorm.DB) gin.HandlerFunc {
@@ -38,8 +39,11 @@ func Login(router *gin.Engine, db *gorm.DB) gin.HandlerFunc {
 			})
 			return
 		}
-
-		token, err := CreateToken(user)
+		var otp models.UserVerify
+		otp.Email = input.Email
+		rand.Seed(time.Now().UnixNano())
+		otp.Otp = strconv.Itoa(rand.Intn(10000))
+		// token, err := CreateToken(user)
 
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
@@ -47,11 +51,23 @@ func Login(router *gin.Engine, db *gorm.DB) gin.HandlerFunc {
 			})
 			return
 		}
+		db.Create(&otp)
+		err = Sendemail(otp.Email,otp.Otp)
+		
+		if err != nil{
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":"error in sending email",
+			})
+		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"message": "user loged in",
-			"token":   token,
+			"message":"email sent successfully",
 		})
+
+		// c.JSON(http.StatusOK, gin.H{
+		// 	"message": "user loged in",
+		// 	"token":   token,
+		// })
 
 	}
 }

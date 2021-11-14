@@ -7,7 +7,7 @@ import (
 	"log"
 	"server/middleware"
 	"github.com/gin-gonic/gin"
-		"gorm.io/driver/mysql"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -23,6 +23,7 @@ func main() {
 	}
 
 	db.AutoMigrate(models.User{})
+	db.AutoMigrate(models.UserVerify{})
 
 	router.GET("/", handlers.Home(router))
 
@@ -44,6 +45,8 @@ func main() {
 	router.POST("/signup", handlers.Signup(router, db))
 
 	router.POST("/login", handlers.Login(router, db))
+
+	router.POST("/verifyotp",handlers.VerifyOtp(router,db))
 
 	
 	http.ListenAndServe(":8080", router)
